@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
 import transactionRoutes from './routes/transactionRoutes';
-import { initSocket } from './config/socket'; 
+import { initSocket } from './config/socket';
 import './services/transactionScheduler';
 
 dotenv.config();
@@ -26,7 +26,7 @@ app.get('/', (req: Request, res: Response) => {
 const server = createServer(app);
 
 // Initialisation de Socket.IO avec le serveur
-// initSocket(server);
+initSocket(server);
 
 // Démarrer le serveur
 server.listen(PORT, () => {

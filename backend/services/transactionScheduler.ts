@@ -1,7 +1,7 @@
 import schedule from "node-schedule";
 import { v4 as uuidv4 } from "uuid";
 const { Transaction } = require("../models");
-// const { getSocket } = require("../config/socket");
+const { getSocket } = require("../config/socket");
 
 const generateMockTransaction = () => {
   return {
@@ -22,12 +22,12 @@ const confirmTransaction = async (transaction: any) => {
     );
 
     // Vérifier que le socket est disponible avant d’émettre un événement
-//     const socket = getSocket();
-//     if (socket) {
-//       socket.emit("transactionConfirmed", { id: transaction.id });
-//     } else {
-//       console.error("Socket not available, unable to emit transactionConfirmed event");
-//     }
+    const socket = getSocket();
+    if (socket) {
+      socket.emit("transactionConfirmed", { id: transaction.id });
+    } else {
+      console.error("Socket not available, unable to emit transactionConfirmed event");
+    }
   } catch (error) {
     console.error("Error confirming transaction:", error);
   }
@@ -40,12 +40,12 @@ schedule.scheduleJob("*/1 * * * *", async () => {
     const transaction = await Transaction.create(mockTransaction);
 
     // Vérifier que le socket est disponible avant d’émettre un événement
-//     const socket = getSocket();
-//     if (socket) {
-//       socket.emit("transactionCreated", { id: transaction.id });
-//     } else {
-//       console.error("Socket not available, unable to emit transactionCreated event");
-//     }
+    const socket = getSocket();
+    if (socket) {
+      socket.emit("transactionCreated", { id: transaction.id });
+    } else {
+      console.error("Socket not available, unable to emit transactionCreated event");
+    }
 
     // Planifier la confirmation après 10 secondes
     setTimeout(() => confirmTransaction(transaction), 10000);
