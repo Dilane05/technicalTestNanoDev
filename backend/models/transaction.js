@@ -28,6 +28,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW, // Définit la valeur par défaut à `NOW()`
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW, // Définit la valeur par défaut à `NOW()`
+    }
   }, {
     tableName: 'transactions',
     timestamps: false,

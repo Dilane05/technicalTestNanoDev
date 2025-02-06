@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { createServer } from 'http';
 import transactionRoutes from './routes/transactionRoutes';
 import { initSocket } from './config/socket'; 
+import './services/transactionScheduler';
 
 dotenv.config();
 
