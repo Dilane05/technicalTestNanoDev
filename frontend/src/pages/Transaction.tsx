@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Table, Pagination, Form, Row, Col, Card } from "react-bootstrap";
-const API_URL = import.meta.env.apiBaseUrl;
+
+import { Table, Pagination, Form, Row, Col, Card, Button } from "react-bootstrap";
+import CreateTransactionModal from "../components/CreateTransactionModal";
+import EditTransactionModal from "../components/EditTransactionModal";
+// import DeleteTransactionModal from "./DeleteTransactionModal";
 
 export interface Transaction {
   id: string;
@@ -19,6 +22,10 @@ const TransactionsPage = () => {
   const [endDate, setEndDate] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5;
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
 
   //Récupération des transactions
   const fetchTransactions = async () => {
@@ -65,6 +72,7 @@ const TransactionsPage = () => {
           <Col><strong>Pending:</strong> {pendingCount}</Col>
         </Row>
       </Card>
+      <Button variant="primary" onClick={() => setShowCreateModal(true)} className="mb-3">Add Transaction</Button>
       <Form className="mb-3">
         <Row>
           <Col>
@@ -100,6 +108,7 @@ const TransactionsPage = () => {
             <th>Value</th>
             <th>Status</th>
             <th>Date</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -111,6 +120,10 @@ const TransactionsPage = () => {
               <td>{tx.value} XAF</td>
               <td>{tx.confirmed ? "Confirmed" : "Pending"}</td>
               <td>{new Date(tx.timestamp).toLocaleString()}</td>
+              <td>
+                <Button variant="warning" size="sm" onClick={() => { setSelectedTransaction(tx); setShowEditModal(true); }}>Edit</Button>{' '}
+                <Button variant="danger" size="sm" onClick={() => { setSelectedTransaction(tx); setShowDeleteModal(true); }}>Delete</Button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -122,6 +135,9 @@ const TransactionsPage = () => {
           </Pagination.Item>
         ))}
       </Pagination>
+      <CreateTransactionModal show={showCreateModal} handleClose={() => setShowCreateModal(false)} />
+      {selectedTransaction && <EditTransactionModal show={showEditModal} handleClose={() => setShowEditModal(false)} transaction={selectedTransaction} />}
+      {/* {selectedTransaction && <DeleteTransactionModal show={showDeleteModal} handleClose={() => setShowDeleteModal(false)} transaction={selectedTransaction} />} */}
     </div>
   );
 };
