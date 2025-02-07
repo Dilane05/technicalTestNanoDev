@@ -2,9 +2,9 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
-import transactionRoutes from './routes/transactionRoutes';
+import transactionRoutes from './src/routes/transactionRoutes';
 import { initSocket } from './src/config/socket';
-import './services/transactionScheduler';
+import './src/services/transactionScheduler';
 
 dotenv.config();
 
