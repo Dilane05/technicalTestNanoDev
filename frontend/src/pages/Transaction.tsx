@@ -7,6 +7,7 @@ import CreateTransactionModal from "../components/CreateTransactionModal";
 import EditTransactionModal from "../components/EditTransactionModal";
 import { Transaction } from "../types/transaction";
 import ViewTransactionModal from "../components/ViewTransactionModal";
+import socket from "../config/socket";
 
 const TransactionsPage = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -26,7 +27,7 @@ const TransactionsPage = () => {
     try {
       const response = await axios.get(`http://localhost:3010/api/transactions`);
       const sortedTransactions = response.data.sort((a, b) => {
-        return new Date(b.createdAt) - new Date(a.createdAt);
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
       setTransactions(sortedTransactions);
     } catch (error) {
@@ -36,6 +37,25 @@ const TransactionsPage = () => {
 
   useEffect(() => {
     fetchTransactions();
+
+    // Écoute des événements WebSocket
+    socket.on("transactionCreated", ({ id }) => {
+      console.log(`New transaction created: ${id}`);
+      toast.info(`New transaction created: ${id}`);
+      fetchTransactions(); // Recharger la liste
+    });
+
+    socket.on("transactionConfirmed", ({ id }) => {
+      console.log(`Confirmed transaction: ${id}`);
+      toast.success(`Confirmed transaction: ${id}`);
+      fetchTransactions(); // Mettre à jour la liste
+    });
+
+    // Nettoyage des événements lors du démontage du composant
+    return () => {
+      socket.off("transactionCreated");
+      socket.off("transactionConfirmed");
+    };
   }, []);
 
   const filteredTransactions = transactions.filter((tx) => {
@@ -138,10 +158,10 @@ const TransactionsPage = () => {
               <td>{tx.confirmed ? "Confirmed" : "Pending"}</td>
               <td>{new Date(tx.timestamp).toLocaleString()}</td>
               <td>
-              <Button
+                <Button
                   variant="info"
                   size="sm"
-                  onClick={() => viewTransactionDetails(tx)} 
+                  onClick={() => viewTransactionDetails(tx)}
                 >
                   View
                 </Button>{" "}
@@ -155,7 +175,6 @@ const TransactionsPage = () => {
                 >
                   Edit
                 </Button>{" "}
-               
               </td>
             </tr>
           ))}

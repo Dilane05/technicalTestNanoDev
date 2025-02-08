@@ -16,10 +16,21 @@ const generateMockTransaction = () => {
 
 const confirmTransaction = async (transaction: any) => {
   try {
+
+    const updatedTransaction = await Transaction.update(
+      { confirmed: true },
+      { where: { id: transaction.id } }
+    );
+
     await Transaction.update(
       { confirmed: true },
       { where: { id: transaction.id } }
     );
+
+    if (updatedTransaction[0] === 0) {
+      console.warn(`Transaction ${transaction.id} non trouvée pour confirmation.`);
+      return;
+    }
 
     // Vérifier que le socket est disponible avant d’émettre un événement
     const socket = getSocket();
@@ -34,22 +45,22 @@ const confirmTransaction = async (transaction: any) => {
 };
 
 // Planifier la création de transactions toutes les minutes
-// schedule.scheduleJob("*/1 * * * *", async () => {
-//   try {
-//     const mockTransaction = generateMockTransaction();
-//     const transaction = await Transaction.create(mockTransaction);
+schedule.scheduleJob("*/1 * * * *", async () => {
+  try {
+    const mockTransaction = generateMockTransaction();
+    const transaction = await Transaction.create(mockTransaction);
 
-//     // Vérifier que le socket est disponible avant d’émettre un événement
-//     const socket = getSocket();
-//     if (socket) {
-//       socket.emit("transactionCreated", { id: transaction.id });
-//     } else {
-//       console.error("Socket not available, unable to emit transactionCreated event");
-//     }
+    // Vérifier que le socket est disponible avant d’émettre un événement
+    const socket = getSocket();
+    if (socket) {
+      socket.emit("transactionCreated", { id: transaction.id });
+    } else {
+      console.error("Socket not available, unable to emit transactionCreated event");
+    }
 
-//     // Planifier la confirmation après 10 secondes
-//     setTimeout(() => confirmTransaction(transaction), 10000);
-//   } catch (error) {
-//     console.error("Error creating mock transaction:", error);
-//   }
-// });
+    // Planifier la confirmation après 10 secondes
+    setTimeout(() => confirmTransaction(transaction), 10000);
+  } catch (error) {
+    console.error("Error creating mock transaction:", error);
+  }
+});
