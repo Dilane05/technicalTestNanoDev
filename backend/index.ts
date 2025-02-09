@@ -2,18 +2,23 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
-import transactionRoutes from './src/routes/transactionRoutes';
-import { initSocket } from './src/config/socket';
-import './src/services/transactionScheduler';
+import transactionRoutes from './routes/transactionRoutes';
+import { initSocket } from './config/socket';
+import './services/transactionScheduler';
+import { setupSwagger } from "./swaggerConfig";
 
 dotenv.config();
 
-const app = express();
+export const app = express();
+
 const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
 app.use(cors());
+
+// Intégration Swagger
+setupSwagger(app);
 
 // Routes
 app.use('/api', transactionRoutes);

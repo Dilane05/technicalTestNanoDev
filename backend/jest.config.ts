@@ -1,9 +1,9 @@
-export default {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  transform: {
-    '^.+\\.ts$': 'ts-jest',
-  },
-  moduleFileExtensions: ['ts', 'js', 'json'],
-  testMatch: ['**/test/**/*.test.ts'],
+module.exports = {
+  preset: "ts-jest",
+  testEnvironment: "node",
+  testMatch: ["**/__tests__/**/*.test.ts"],
+  collectCoverage: true,
+  coverageDirectory: "coverage",
+  clearMocks: true,
+  detectOpenHandles: true,
 };
