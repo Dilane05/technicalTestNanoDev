@@ -9,7 +9,6 @@ import { setupSwagger } from "./swaggerConfig";
 import { scheduledJob } from './services/transactionScheduler';
 
 import * as dotenv from "dotenv";
-
 dotenv.config();
 
 const app = express();

@@ -1,0 +1,28 @@
+name: Build and Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - main  # Déclenche le workflow lorsqu'il y a des changements sur la branche principale
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Exécute le job sur une machine virtuelle Ubuntu
+
+    steps:
+      # Checkout du code du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Construire l'image Docker
+      - name: Build Docker Image
+        run: |
+          docker build -t my-app .
+
+      # Push l'image vers Vercel (en utilisant Vercel CLI)
+      - name: Push to Vercel
+        run: |
+          npm install -g vercel
+          vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

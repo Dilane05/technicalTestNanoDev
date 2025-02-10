@@ -14,7 +14,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show, handl
   const [formData, setFormData] = useState<Transaction>(transaction);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,

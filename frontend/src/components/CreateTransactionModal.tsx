@@ -21,12 +21,18 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target as HTMLInputElement;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "value" ? Number(value) : value, // Convertir `value` en nombre
+      [name]:
+        type === "checkbox"
+          ? checked
+          : name === "value"
+          ? Number(value)
+          : value,
     }));
   };
 
@@ -90,12 +96,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
               label="Confirmé"
               name="confirmed"
               checked={formData.confirmed}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  confirmed: e.target.checked,
-                }))
-              }
+              onChange={handleChange}
             />
           </Form.Group>
           <Button variant="primary" type="submit">

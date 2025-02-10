@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Table, Pagination, Form, Row, Col, Card, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-import Swal from "sweetalert2";
 import CreateTransactionModal from "../components/CreateTransactionModal";
 import EditTransactionModal from "../components/EditTransactionModal";
 import { Transaction } from "../types/transaction";
@@ -26,11 +25,8 @@ const TransactionsPage = () => {
   // Récupération des transactions
   const fetchTransactions = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/transactions`);
-      const sortedTransactions = response.data.sort((a, b) => {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-      });
-      setTransactions(sortedTransactions);
+      const response = await axios.get(`${API_URL}/api/transactions`);     
+      setTransactions(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des transactions :", error);
     }
@@ -40,18 +36,18 @@ const TransactionsPage = () => {
     fetchTransactions();
 
     // Écoute des événements WebSocket
-    socket.on("transactionCreated", ({ id }) => {
+    socket.on("transactionCreated", ({ id }: { id: string }) => {
       console.log(`New transaction created: ${id}`);
       toast.info(`New transaction created: ${id}`);
-      fetchTransactions(); // Recharger la liste
+      fetchTransactions();
     });
-
-    socket.on("transactionConfirmed", ({ id }) => {
+    
+    socket.on("transactionConfirmed", ({ id }: { id: string }) => {
       console.log(`Confirmed transaction: ${id}`);
       toast.success(`Confirmed transaction: ${id}`);
-      fetchTransactions(); // Mettre à jour la liste
+      fetchTransactions();
     });
-
+    
     // Nettoyage des événements lors du démontage du composant
     return () => {
       socket.off("transactionCreated");
