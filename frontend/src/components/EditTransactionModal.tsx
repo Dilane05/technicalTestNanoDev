@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import { Transaction } from "../types/transaction";
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface EditTransactionModalProps {
   show: boolean;
@@ -27,7 +28,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show, handl
 
     try {
       // 🔹 Appel API pour modifier la transaction
-      await axios.put(`http://localhost:3010/api/transactions/${transaction.id}`, formData);
+      await axios.put(`${API_URL}/api/transactions/${transaction.id}`, formData);
 
       console.log("Transaction mise à jour :", formData);
       handleClose();

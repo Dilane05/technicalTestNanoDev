@@ -8,6 +8,7 @@ import EditTransactionModal from "../components/EditTransactionModal";
 import { Transaction } from "../types/transaction";
 import ViewTransactionModal from "../components/ViewTransactionModal";
 import socket from "../config/socket";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const TransactionsPage = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -25,7 +26,7 @@ const TransactionsPage = () => {
   // Récupération des transactions
   const fetchTransactions = async () => {
     try {
-      const response = await axios.get(`http://localhost:3010/api/transactions`);
+      const response = await axios.get(`${API_URL}/api/transactions`);
       const sortedTransactions = response.data.sort((a, b) => {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });

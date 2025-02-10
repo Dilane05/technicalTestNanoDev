@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+    ports:
+      - "3050:3050"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USERNAME=root
+      - DB_PASSWORD=
+    networks:
+      - backend-network
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: test_technic
+    ports:
+      - "3307:3306"
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge

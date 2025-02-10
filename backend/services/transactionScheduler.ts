@@ -45,7 +45,7 @@ const confirmTransaction = async (transaction: any) => {
 };
 
 // Planifier la création de transactions toutes les minutes
-schedule.scheduleJob("*/1 * * * *", async () => {
+const scheduledJob = schedule.scheduleJob("*/1 * * * *", async () => {
   try {
     const mockTransaction = generateMockTransaction();
     const transaction = await Transaction.create(mockTransaction);
@@ -65,4 +65,4 @@ schedule.scheduleJob("*/1 * * * *", async () => {
   }
 });
 
-export { generateMockTransaction, confirmTransaction };
+export { generateMockTransaction, confirmTransaction, scheduledJob };

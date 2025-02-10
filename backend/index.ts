@@ -1,15 +1,18 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 import { createServer } from 'http';
 import transactionRoutes from './routes/transactionRoutes';
 import { initSocket } from './config/socket';
 import './services/transactionScheduler';
 import { setupSwagger } from "./swaggerConfig";
+import { scheduledJob } from './services/transactionScheduler';
+
+import * as dotenv from "dotenv";
 
 dotenv.config();
 
-export const app = express();
+const app = express();
 
 const PORT = process.env.PORT || 3000;
 
@@ -38,3 +41,5 @@ server.listen(PORT, () => {
     console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
 });
 
+
+export { app, server, scheduledJob };

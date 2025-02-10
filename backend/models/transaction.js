@@ -1,9 +1,12 @@
 'use strict';
 
+const { v4: uuidv4 } = require('uuid');
+
 module.exports = (sequelize, DataTypes) => {
   const Transaction = sequelize.define('Transaction',{
     id: {
       type: DataTypes.STRING,
+      defaultValue: () => uuidv4(),
       primaryKey: true,
       allowNull: false,
     },

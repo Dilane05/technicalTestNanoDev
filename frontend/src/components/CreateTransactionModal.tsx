@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import { CreateTransaction } from "../types/transaction";
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface CreateTransactionModalProps {
   show: boolean;
@@ -36,7 +37,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
     // Appel API pour créer une transaction
     try {
       const response = await axios.post(
-        `http://localhost:3010/api/transactions`,
+        `${API_URL}/api/transactions`,
         formData
       );
       console.log("Transaction créée :", response.data);

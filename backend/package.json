@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
+    "test": "jest --detectOpenHandles --forceExit",
+    "test:watch": "jest --watch --detectOpenHandles",
     "dev": "nodemon index.ts"
   },
   "keywords": [],
@@ -21,6 +20,7 @@
     "node-schedule": "^2.1.1",
     "sequelize": "^6.37.5",
     "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^11.0.5"

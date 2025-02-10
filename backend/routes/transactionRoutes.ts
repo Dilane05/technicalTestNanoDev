@@ -4,7 +4,6 @@ import {
   updateTransaction,
   getAllTransactions,
   getTransactionById,
-  getTransactionsByDateRange,
 } from '../controllers/transactionController';
 
 const router = Router();
@@ -135,39 +134,6 @@ router.put('/transactions/:id', updateTransaction);
  *                 $ref: '#/components/schemas/Transaction'
  */
 router.get('/transactions', getAllTransactions);
-
-/**
- * @swagger
- * /api/transactions/date-range:
- *   get:
- *     summary: Récupérer des transactions dans une plage de dates spécifiée
- *     tags: [Transactions]
- *     parameters:
- *       - in: query
- *         name: startDate
- *         required: true
- *         description: Date de début de la plage (timestamp)
- *         schema:
- *           type: number
- *       - in: query
- *         name: endDate
- *         required: true
- *         description: Date de fin de la plage (timestamp)
- *         schema:
- *           type: number
- *     responses:
- *       200:
- *         description: Liste des transactions dans la plage de dates
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Transaction'
- *       400:
- *         description: Paramètres de date invalides
- */
-router.get('/transactions/date-range', getTransactionsByDateRange);
 
 /**
  * @swagger
